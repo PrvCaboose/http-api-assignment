@@ -1,0 +1,27 @@
+{
+  "name": "http-api-assignment",
+  "version": "1.0.0",
+  "description": "API Assignment for IGME-430",
+  "homepage": "https://github.com/PrvCaboose/http-api-assignment#readme",
+  "bugs": {
+    "url": "https://github.com/PrvCaboose/http-api-assignment/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/PrvCaboose/http-api-assignment.git"
+  },
+  "license": "ISC",
+  "author": "John Huggins",
+  "type": "commonjs",
+  "main": "./src/server.js",
+  "scripts": {
+    "start": "node ./src/server.js",
+    "pretest": "eslint ./src --fix",
+    "test": "echo \"Tests Complete\""
+  },
+  "devDependencies": {
+    "eslint": "^8.57.1",
+    "eslint-config-airbnb": "^19.0.4",
+    "eslint-plugin-import": "^2.32.0"
+  }
+}
