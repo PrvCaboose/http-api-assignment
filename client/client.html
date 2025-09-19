@@ -6,11 +6,27 @@
   
   <script>
 
+    const displayMessage = async (response) => {
+      const container = document.getElementById('content');
+      let data;
+      if (response.headers.get('content-type') === 'application/json')  {
+        data = await response.json();  //json
+        container.innerHTML = `Message: ${data.message}`;
+      } else {
+        data = await response.text();  //xml
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(data, "text/xml");
+        container.innerHTML = `Message: ${doc.getElementsByTagName('message')[0].innerHTML}`;
+      }
+       
+      console.log(data);
+    }
 
     const init = () => {
       const button = document.getElementById('send');
       const page = document.getElementById('page');
       const type = document.getElementById('type');
+      
 
 
       const sendRequest = async () => {
@@ -19,15 +35,9 @@
           method: 'get', headers : {'Accept' : type.value}
         });
 
-        console.log(response.headers)
-        let data;
-        if (response.headers.content-type === 'application/json')  {
-          data = await response.json();  //json
-        } else {
-          data = await response.text();  //xml
-        }
-         
-        console.log(data);
+        displayMessage(response);
+
+        
       }
 
       button.onclick = sendRequest;

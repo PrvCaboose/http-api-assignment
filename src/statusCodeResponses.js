@@ -6,10 +6,10 @@ const formatMessage = (message, errorID, contentType) => {
     if (errorID) { json.id = errorID; }
     content = JSON.stringify(json);
   } else {
-    content = `<response><message>${message}`;
+    content = `<response><message>${message}</message>`;
     // If error ID exists, add it to xml
     if (errorID) { content = `${content}<id>${errorID}</id>`; }
-    content = `${content}</message></response>`;
+    content = `${content}</response>`;
   }
   return content;
 };
@@ -49,7 +49,49 @@ const getBadRequest = (request, response, url, contentType) => {
   sendResponse(response, content, contentType, statusCode, errorID);
 };
 
+const getUnauthorized = (request, response, url, contentType) => {
+  let content;
+  let statusCode;
+  let errorID;
+
+  // Determine success or fail
+  // NOTE: Could write 2 different function calls in conditional to preserve memory (no variables)
+  //        however this is more readable for now
+  if (url.searchParams.get('loggedIn') === 'yes') {
+    content = 'Successful login';
+    statusCode = 200;
+  } else {
+    content = 'Missing loggedIn query parameter set to yes';
+    statusCode = 401;
+    errorID = 'Unauthorized';
+  }
+
+  // Send response
+  sendResponse(response, content, contentType, statusCode, errorID);
+};
+
+const getForbidden = (request, response, url, contentType) => {
+  sendResponse(response, 'You do not have access to view this content', contentType, 403, 'forbidden');
+};
+
+const getInternal = (request, response, url, contentType) => {
+  sendResponse(response, 'Internal Server Error', contentType, 500, 'internalError');
+};
+
+const getNotImplemented = (request, response, url, contentType) => {
+  sendResponse(response, 'This page has not been implemented yet', contentType, 501, 'notImplemented');
+};
+
+const getWrongPage = (request, response, url, contentType) => {
+  sendResponse(response, 'Resource Not Found', contentType, 404, 'notFound');
+};
+
 module.exports = {
   getSuccess,
   getBadRequest,
+  getUnauthorized,
+  getForbidden,
+  getInternal,
+  getNotImplemented,
+  getWrongPage,
 };
